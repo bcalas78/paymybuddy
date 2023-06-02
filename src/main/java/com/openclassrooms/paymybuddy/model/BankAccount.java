@@ -19,9 +19,10 @@ public class BankAccount {
     @Column(name = "bank_account_id", nullable = false)
     private int bank_account_id;
 
-    /*@Column(name = "user_id", nullable = false)
-    private int user_id;*/
-
     @Column(name = "bank_amount")
     private Float bank_amount;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
 }

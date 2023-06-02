@@ -19,9 +19,10 @@ public class Fee {
     @Column(name = "fee_id", nullable = false)
     private int fee_id;
 
-    /*@Column(name = "transaction_id", nullable = false)
-    private int transaction_id;*/
-
     @Column(name = "fee_amount", nullable = false)
     private Float fee_amount;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tansaction_id", referencedColumnName = "transaction_id")
+    private Transaction transaction;
 }

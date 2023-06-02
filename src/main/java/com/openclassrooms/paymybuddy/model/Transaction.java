@@ -19,13 +19,16 @@ public class Transaction {
     @Column(name = "transaction_id", nullable = false)
     private int transaction_id;
 
-    /*@Column(name = "contact_id")
-    private int contact_id;*/
-
     @Column(name = "description")
     private String description;
 
     @Column(name = "amount", nullable = false)
     private Float amount;
 
+    @OneToOne(mappedBy = "transaction")
+    private Fee fee;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="contact_id")
+    private Contact contact;
 }
