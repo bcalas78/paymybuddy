@@ -23,13 +23,13 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/registration/**").permitAll()
                         .requestMatchers("/login/**").permitAll()
-                        .requestMatchers("/user/**").hasAnyRole("USER")
+                        //.requestMatchers("/user_page/**").hasAnyRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/user/")
+                        .defaultSuccessUrl("/user_page")
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll())

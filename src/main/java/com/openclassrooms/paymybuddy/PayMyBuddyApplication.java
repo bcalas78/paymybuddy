@@ -12,9 +12,9 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import java.util.Optional;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
-public class PayMyBuddyApplication implements CommandLineRunner {
+public class PayMyBuddyApplication {
 
-	@Autowired
+	/*@Autowired
 	private UserService userService;
 
 	@Autowired
@@ -30,13 +30,13 @@ public class PayMyBuddyApplication implements CommandLineRunner {
 	private ContactService contactService;
 
 	@Autowired
-	private FeeService feeService;
+	private FeeService feeService;*/
 
 	public static void main(String[] args) {
 		SpringApplication.run(PayMyBuddyApplication.class, args);
 	}
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 		Iterable<User> users = userService.getUsers();
 		users.forEach(user -> System.out.println(user.getFirst_name() + ' ' + user.getLast_name()));
@@ -79,5 +79,5 @@ public class PayMyBuddyApplication implements CommandLineRunner {
 		Optional<Fee> optFee = feeService.getFeeById(1);
 		Fee fee1 = optFee.get();
 		System.out.println(fee1.getFee_amount());
-	}
+	}*/
 }
