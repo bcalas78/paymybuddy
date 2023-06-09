@@ -13,4 +13,6 @@ public interface UserService {
     Iterable<User> getUsers();
 
     Optional<User> getUserById(Integer id);
+
+    User getCurrentUser();
 }
