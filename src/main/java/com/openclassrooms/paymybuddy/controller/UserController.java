@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/user_page")
 public class UserController {
+
     @GetMapping()
     public String registrationForm() {
         return "user";
     }
+
+
 }

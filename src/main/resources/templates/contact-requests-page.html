@@ -8,28 +8,27 @@
     <title>contact-requests-page</title>
 </head>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>From</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="request : ${contacts}">
-        <td th:text="${contact.user.email}"></td>
-        <td>
-            <form th:action="/contact-requests/accept" method="POST">
-                <input type="hidden" name="contacId" th:value="${contact.contact_id}">
-                <button type="submit">Accept</button>
-            </form>
-            <form th:action="/contact-requests/decline" method="POST">
-                <input type="hidden" name="contactId" th:value="${contact.contact_id}">
-                <button type="submit">Decline</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <div th:if="${contacts.isEmpty()}">
+        <p>You don't have any buddy request</p>
+        <div><a th:href="@{/add-contact}">Add a contact</a></div>
+        <div><a th:href="@{/logout}">Logout</a></div>
+    </div>
+
+    <div th:if="${not contacts.isEmpty()}">
+        <table>
+            <thead>
+                <tr>
+                    <th>User Email</th>
+                    <th>Buddy Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="contact : ${contacts}">
+                    <td th:text="${contact.getUser().getEmail()}"></td>
+                    <td th:text="${contact.getBuddy().getEmail()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

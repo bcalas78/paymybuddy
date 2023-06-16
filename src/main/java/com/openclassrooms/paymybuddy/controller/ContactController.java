@@ -3,7 +3,7 @@ package com.openclassrooms.paymybuddy.controller;
 import com.openclassrooms.paymybuddy.model.Contact;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.service.ContactService;
-import com.openclassrooms.paymybuddy.service.UserService;
+import com.openclassrooms.paymybuddy.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,29 +21,17 @@ public class ContactController {
     private ContactService contactService;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @GetMapping("/contact-requests")
     public String contactRequests(Model model, Principal principal) {
         String email = principal.getName();
         User user = userService.findUserByEmail(email);
 
-        List<User> contacts = contactService.getContacts(user);
+        List<Contact> contacts = contactService.getContacts(user);
         model.addAttribute("contacts", contacts);
 
         return "contact-requests-page";
-    }
-
-    @PostMapping("/contact-requests/accept")
-    public String acceptContactRequest(@RequestParam("contactId") Integer contactId) {
-        contactService.acceptContactRequest(contactId);
-        return  "redirect:/contact-requests";
-    }
-
-    @PostMapping("/contact-requests/decline")
-    public String declineContactRequest(@RequestParam("contactId") Integer contactId) {
-        contactService.declineContactRequest(contactId);
-        return  "redirect:/contact-requests";
     }
 
     @GetMapping("/add-contact")
@@ -53,8 +41,28 @@ public class ContactController {
     }
 
     @PostMapping("/add-contact")
-    public String sendContactRequest(@RequestParam String buddyEmail) {
-        contactService.sendContactRequest(buddyEmail);
+    public String sendContactRequest(@RequestParam("buddyEmail") String buddyEmail, Principal principal) {
+        String userEmail = principal.getName();
+
+        User user = userService.findUserByEmail(userEmail);
+        User buddy = userService.findUserByEmail(buddyEmail);
+
+        if(user != null && buddy != null) {
+            contactService.sendContactRequest(user, buddy);
+        }
+
         return "redirect:/contact-requests";
     }
+
+     /*@PostMapping("/contact-requests/accept")
+    public String acceptContactRequest(@RequestParam("contact_id") Integer contact_id) {
+        contactService.acceptContactRequest(contact_id);
+        return  "redirect:/contact-requests";
+    }*/
+
+    /*@PostMapping("/contact-requests/decline")
+    public String declineContactRequest(@RequestParam("contact_id") Integer contact_id) {
+        contactService.declineContactRequest(contact_id);
+        return  "redirect:/contact-requests";
+    }*/
 }

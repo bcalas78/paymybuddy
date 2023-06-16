@@ -28,16 +28,14 @@ public class Contact {
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
     )
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", referencedColumnName="user_id")
     private User user;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
     )
-    @JoinColumn(name="buddy_id")
+    @JoinColumn(name="buddy_id", referencedColumnName="user_id")
     private User buddy;
 
-    /*@Column(name = "buddy_id", nullable = false)
-    private int buddy_id;*/
 }

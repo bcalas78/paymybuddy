@@ -49,28 +49,23 @@ public class TransactionService {
                 throw new InsufficientFundsException("Not enough balance to make the transaction.");
             }
 
-            // Débit du compte de l'utilisateur
             user.setUser_amount(user.getUser_amount() - totalAmount);
             userRepository.save(user);
 
-            //Récupération du contact entre l'utilisateur et l'ami
             Contact contact = contactRepository.findByUserAndBuddy(user, buddy)
                     .orElseThrow(() -> new ContactNotFoundException("Contact not found between user and buddy."));
 
-            // Création de la transaction
             Transaction transaction = new Transaction();
             transaction.setContact(contact);
             transaction.setAmount(amount);
             transaction.setDescription(description);
             transactionRepository.save(transaction);
 
-            // Création de la commission (fee)
             Fee fee = new Fee();
             fee.setTransaction(transaction);
             fee.setFee_amount(feeAmount);
             feeRepository.save(fee);
 
-            // Crédit du compte de l'ami (buddy)
             buddy.setUser_amount(buddy.getUser_amount() + amount);
             userRepository.save(buddy);
 

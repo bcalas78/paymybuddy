@@ -1,7 +1,6 @@
 package com.openclassrooms.paymybuddy.service;
 
 import com.openclassrooms.paymybuddy.exceptions.ContactAlreadyExistsException;
-import com.openclassrooms.paymybuddy.exceptions.ContactNotFoundException;
 import com.openclassrooms.paymybuddy.exceptions.UserNotFoundException;
 import com.openclassrooms.paymybuddy.model.Contact;
 import com.openclassrooms.paymybuddy.model.User;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -25,7 +23,7 @@ public class ContactService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     public Iterable<Contact> getContacts() {
         return contactRepository.findAll();
@@ -35,47 +33,39 @@ public class ContactService {
         return contactRepository.findById(id);
     }
 
-    public void addContact(User user, User buddy) {
+    public void addContact(User buddy) {
+        User currentUser = userServiceImpl.getCurrentUser();
 
-        if (contactRepository.existsByUserAndBuddy(user, buddy)) {
+        if (contactRepository.existsByUserAndBuddy(currentUser, buddy)) {
             throw new ContactAlreadyExistsException("Contact already exists");
         }
 
         Contact contact = new Contact();
-        contact.setUser(user);
+        contact.setUser(currentUser);
         contact.setBuddy(buddy);
         contactRepository.save(contact);
     }
 
-    public List<User> getContacts(User user) {
-        List<Contact> contacts = contactRepository.findByUser(user);
-        return  contacts.stream()
-                .map(Contact::getBuddy)
-                .collect(Collectors.toList());
+    public void addBuddy(User user, User buddy) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setBuddy(buddy);
+
+        contactRepository.save(contact);
     }
 
-    public void acceptContactRequest(Integer contactId) {
-        Contact contact = contactRepository.findById(contactId)
-                .orElseThrow(() -> new ContactNotFoundException("Contact not found"));
-
-        User user = contact.getUser();
-        User buddy = contact.getBuddy();
-
-        addContact(user, buddy);
-
-        contactRepository.delete(contact);
+    public List<Contact> getContacts(User user) {
+        return contactRepository.findByUser(user);
     }
 
-    public void declineContactRequest(Integer contactId) {
-        Contact contact = contactRepository.findById(contactId)
-                .orElseThrow(() -> new ContactNotFoundException("Contact not found"));
+    public void sendContactRequest(User user, User buddy) {
+        Contact contact = new Contact();
+        contact.setUser(user);
+        contact.setBuddy(buddy);
 
-        contactRepository.delete(contact);
-    }
+        user.getSentContacts().add(contact);
 
-    public void sendContactRequest(String buddyEmail) {
-        User user = userService.getCurrentUser();
-        User buddy = userRepository.findByEmail(buddyEmail);
+        buddy.getReceivedContacts().add(contact);
 
         if (user == null || buddy == null) {
             throw new UserNotFoundException("User or buddy not found!");
@@ -87,10 +77,26 @@ public class ContactService {
             throw new DuplicateRequestException("Contact request already sent!");
         }
 
-        Contact contact = new Contact();
-        contact.setUser(user);
-        contact.setBuddy(buddy);
-
-        contactRepository.save(contact);
+        userRepository.save(user);
+        userRepository.save(buddy);
     }
+
+    /*public void acceptContactRequest(Integer contactId) {
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new ContactNotFoundException("Contact not found"));
+
+        User user = contact.getUser();
+        User buddy = contact.getBuddy();
+
+        addBuddy(user, buddy);
+
+        contactRepository.delete(contact);
+    }*/
+
+    /*public void declineContactRequest(Integer contactId) {
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new ContactNotFoundException("Contact not found"));
+
+        contactRepository.delete(contact);
+    }*/
 }

@@ -29,6 +29,6 @@ public class Transaction {
     private Fee fee;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="contact_id")
+    @JoinColumn(name="contact_id", referencedColumnName = "contact_id")
     private Contact contact;
 }

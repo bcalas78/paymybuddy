@@ -9,7 +9,7 @@ public class PayMyBuddyService {
     @Autowired
     private ContactService contactService;
 
-    public void addContactToUser(User user, User buddy) {
-        contactService.addContact(user, buddy);
+    public void addBuddyToUser(User user, User buddy) {
+        contactService.addBuddy(user, buddy);
     }
 }

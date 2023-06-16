@@ -45,8 +45,11 @@ public class User {
     )
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "contact_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Contact> contacts = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contact> sentContacts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "buddy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Contact> receivedContacts = new ArrayList<>();
 
     @OneToOne(mappedBy = "user")
     private BankAccount bankAccount;
@@ -58,6 +61,5 @@ public class User {
         this.password = password;
         this.user_amount = user_amount;
         this.roles = roles;
-        //this.contacts = contacts;
     }
 }
