@@ -15,4 +15,6 @@ public interface ContactRepository extends CrudRepository<Contact, Integer> {
     List<Contact> findByUser(User user);
 
     boolean existsByUserAndBuddy(User user, User buddy);
+
+    Contact save(Contact contact);
 }

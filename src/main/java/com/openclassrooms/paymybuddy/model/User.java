@@ -49,7 +49,7 @@ public class User {
     private List<Contact> sentContacts = new ArrayList<>();
 
     @OneToMany(mappedBy = "buddy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Contact> receivedContacts = new ArrayList<>();
+    private List<Contact> buddies = new ArrayList<>();
 
     @OneToOne(mappedBy = "user")
     private BankAccount bankAccount;

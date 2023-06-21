@@ -25,6 +25,10 @@ public class ContactService {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    public Optional<Contact> getContact(User user, User buddy) {
+        return contactRepository.findByUserAndBuddy(user, buddy);
+    }
+
     public Iterable<Contact> getContacts() {
         return contactRepository.findAll();
     }
@@ -65,7 +69,7 @@ public class ContactService {
 
         user.getSentContacts().add(contact);
 
-        buddy.getReceivedContacts().add(contact);
+        buddy.getBuddies().add(contact);
 
         if (user == null || buddy == null) {
             throw new UserNotFoundException("User or buddy not found!");

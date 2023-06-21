@@ -2,6 +2,7 @@ package com.openclassrooms.paymybuddy.service;
 
 import com.openclassrooms.paymybuddy.exceptions.ContactNotFoundException;
 import com.openclassrooms.paymybuddy.exceptions.InsufficientFundsException;
+import com.openclassrooms.paymybuddy.exceptions.UserNotFoundException;
 import com.openclassrooms.paymybuddy.model.Contact;
 import com.openclassrooms.paymybuddy.model.Fee;
 import com.openclassrooms.paymybuddy.model.Transaction;
@@ -24,7 +25,13 @@ public class TransactionService {
     private UserRepository userRepository;
 
     @Autowired
+    private UserServiceImpl userService;
+
+    @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private ContactService contactService;
 
     @Autowired
     private TransactionRepository transactionRepository;
@@ -40,35 +47,44 @@ public class TransactionService {
         return transactionRepository.findById(id);
     }
 
-    public void makeTransaction(User user, User buddy, float amount, String description) {
+    public Transaction makeTransaction(Contact contact, float amount, String description) {
         try {
-            float feeAmount = calculateFee(amount);
-            float totalAmount = amount + feeAmount;
+            if(contact != null) {
+                User user = contact.getUser();
+                User buddy = contact.getBuddy();
 
-            if (user.getUser_amount() < totalAmount) {
-                throw new InsufficientFundsException("Not enough balance to make the transaction.");
+                float feeAmount = calculateFee(amount);
+                float totalAmount = amount + feeAmount;
+
+                if (user.getUser_amount() < totalAmount) {
+                    throw new InsufficientFundsException("Not enough balance to make the transaction.");
+                }
+
+                user.setUser_amount(user.getUser_amount() - totalAmount);
+                userRepository.save(user);
+
+                buddy.setUser_amount(buddy.getUser_amount() + amount);
+                userRepository.save(buddy);
+
+                /*Contact contact = contactRepository.findByUserAndBuddy(user, buddy)
+                        .orElseThrow(() -> new ContactNotFoundException("Contact not found between user and buddy."));*/
+
+                Transaction transaction = new Transaction();
+                transaction.setContact(contact);
+                transaction.setAmount(amount);
+                transaction.setDescription(description);
+                transactionRepository.save(transaction);
+
+                Fee fee = new Fee();
+                fee.setTransaction(transaction);
+                fee.setFee_amount(feeAmount);
+                feeRepository.save(fee);
+
+                return transaction;
+
+            } else {
+                throw new ContactNotFoundException("Contact not found!");
             }
-
-            user.setUser_amount(user.getUser_amount() - totalAmount);
-            userRepository.save(user);
-
-            Contact contact = contactRepository.findByUserAndBuddy(user, buddy)
-                    .orElseThrow(() -> new ContactNotFoundException("Contact not found between user and buddy."));
-
-            Transaction transaction = new Transaction();
-            transaction.setContact(contact);
-            transaction.setAmount(amount);
-            transaction.setDescription(description);
-            transactionRepository.save(transaction);
-
-            Fee fee = new Fee();
-            fee.setTransaction(transaction);
-            fee.setFee_amount(feeAmount);
-            feeRepository.save(fee);
-
-            buddy.setUser_amount(buddy.getUser_amount() + amount);
-            userRepository.save(buddy);
-
         } catch (InsufficientFundsException e) {
             e.printStackTrace();
             throw e;

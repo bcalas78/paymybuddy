@@ -17,16 +17,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="nav navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" th:href="@{/home}">Home</a>
+              <a class="nav-link" th:href="@{/home}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Transfer</a>
+              <a class="nav-link" th:href="@{/transactions}">Transfer</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" th:href="@{/contact-requests}">Contact</a>
+              <a class="nav-link active" th:href="@{/contact-requests}">Contact</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" th:href="@{/logout}">Log off</a>
@@ -39,7 +39,7 @@
   <div class="px-3 py-2 mt-1" style="background-color: #F5F5F5; border-radius: 2px"><span style="color:dodgerblue">Home   /   <span style="color:grey">Contact</span></span></div>
 
 <h1>Add Buddy</h1>
-
+  <a type="button" class="btn btn-primary" th:href="@{/contact-requests}">See all your buddies</a>
 <form action="/add-contact" method="post">
   <div>
     <label for="buddyEmail">Buddy Email:</label>
