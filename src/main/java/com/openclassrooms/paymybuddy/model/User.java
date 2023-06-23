@@ -51,7 +51,7 @@ public class User {
     @OneToMany(mappedBy = "buddy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Contact> buddies = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private BankAccount bankAccount;
 
     public User(String first_name, String last_name, String email, String password, Float user_amount, List<Role> roles) {

@@ -2,7 +2,6 @@ package com.openclassrooms.paymybuddy.service;
 
 import com.openclassrooms.paymybuddy.exceptions.ContactNotFoundException;
 import com.openclassrooms.paymybuddy.exceptions.InsufficientFundsException;
-import com.openclassrooms.paymybuddy.exceptions.UserNotFoundException;
 import com.openclassrooms.paymybuddy.model.Contact;
 import com.openclassrooms.paymybuddy.model.Fee;
 import com.openclassrooms.paymybuddy.model.Transaction;
@@ -70,9 +69,6 @@ public class TransactionService {
 
                 buddy.setUser_amount(buddy.getUser_amount() + amount);
                 userRepository.save(buddy);
-
-                /*Contact contact = contactRepository.findByUserAndBuddy(user, buddy)
-                        .orElseThrow(() -> new ContactNotFoundException("Contact not found between user and buddy."));*/
 
                 Transaction transaction = new Transaction();
                 transaction.setContact(contact);

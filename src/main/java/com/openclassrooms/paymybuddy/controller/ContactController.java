@@ -23,17 +23,6 @@ public class ContactController {
     @Autowired
     private UserServiceImpl userService;
 
-    /*@GetMapping("/contact-requests")
-    public String contactRequests(Model model, Principal principal) {
-        String email = principal.getName();
-        User user = userService.findUserByEmail(email);
-
-        List<Contact> contacts = contactService.getContacts(user);
-        model.addAttribute("contacts", contacts);
-
-        return "contact-requests-page";
-    }*/
-
     @GetMapping("/contact")
     public String showAddContactForm(Model model, Principal principal) {
         String email = principal.getName();
@@ -59,15 +48,4 @@ public class ContactController {
         return "redirect:/contact-page";
     }
 
-     /*@PostMapping("/contact-requests/accept")
-    public String acceptContactRequest(@RequestParam("contact_id") Integer contact_id) {
-        contactService.acceptContactRequest(contact_id);
-        return  "redirect:/contact-requests";
-    }*/
-
-    /*@PostMapping("/contact-requests/decline")
-    public String declineContactRequest(@RequestParam("contact_id") Integer contact_id) {
-        contactService.declineContactRequest(contact_id);
-        return  "redirect:/contact-requests";
-    }*/
 }

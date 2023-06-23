@@ -25,4 +25,9 @@ public class BankAccount {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+        user.setBankAccount(this);
+    }
 }

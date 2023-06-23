@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -38,7 +38,76 @@
   </div>
   <div class="px-3 py-2 mt-1" style="background-color: #F5F5F5; border-radius: 2px"><span style="color:dodgerblue">Home   /   <span style="color:grey">Profile</span></span></div>
 
-  <h1>Your Profile</h1>
+  <div class="d-flex justify-content-between align-items-center mt-3 col-md-10 offset-md-1" >
+    <h6 class="ps-1" style="font-size: 18px;">Your Profile</h6>
+  </div>
+
+  <div class="mt-1 col-md-10 offset-md-1 ps-5 d-flex flex-column" style="background-color: #F5F5F5; border-radius: 2px">
+
+      <span class="mb-3 pt-4">Your First name: <strong><span th:text="${currentUser.first_name}"/></strong></span>
+      <span class="mb-3">Your Last name: <strong><span th:text="${currentUser.last_name}"/></strong></span>
+      <span class="mb-3">Your Email: <strong><span th:text="${currentUser.email}"/></strong></span>
+      <span class="mb-4">Your money amount left is: <strong><span th:text="${currentUser.user_amount}"/>€</strong></span>
+
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mt-3 col-md-10 offset-md-1" >
+    <h6 class="ps-1" style="font-size: 18px;">Your bank account</h6>
+  </div>
+
+  <div class="mt-1 col-md-10 offset-md-1 p-4 d-flex flex-column justify-content-around align-items-center" style="background-color: #F5F5F5; border-radius: 2px">
+    <form th:action="@{/profile}" method="post">
+      <label for="bank_amount">Your bank account amount:</label>
+      <input placeholder="0€" type="number" id="bank_amount" name="bank_amount" value="" required style="text-align: right">
+      <button type="submit" class="paybutton">Save</button>
+    </form>
+    <p th:if="${currentUser.bankAccount != null}" class="mt-3">Your bank account amount is now: <span th:text="${currentUser.bankAccount.bank_amount}"></span>€</p>
+  </div>
+
+  <div class="mt-3" >
+    <h6 class="ps-1 col-md-10 offset-md-1" style="font-size: 18px;">Your Fees</h6>
+    <div th:if="${fees.isEmpty()}" class="ps-1 col-md-10 offset-md-1" style="background-color: #F5F5F5; border-radius: 2px; text-align: center">
+      <p class="p-2"> 🚨 You don't have any transaction and fee yet! 🚨</p>
+    </div>
+
+    <div th:if="${not fees.isEmpty()}">
+      <table class="col-md-10 offset-md-1" style="border: solid 1px black">
+        <tr style="background-color: #64BB5D; color: white; text-align: center">
+          <th class="table-padding">Connections</th>
+          <th class="table-padding">Description</th>
+          <th class="table-padding">Transaction amount</th>
+          <th class="table-padding">Fee amount</th>
+        </tr>
+        <tr th:each="fee : ${fees}">
+          <td class="table-padding" th:text="${fee.getTransaction().getContact().getBuddy().first_name}"></td>
+          <td class="table-padding" th:text="${fee.getTransaction().description}"></td>
+          <td class="table-padding"><span th:text="${fee.getTransaction().amount}"></span>€</td>
+          <td class="table-padding"><span th:text="${fee.fee_amount}"></span>€</td>
+        </tr>
+      </table>
+
+      <nav aria-label="Page navigation" class="mt-1">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disable">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
 </div>
 </body>
 </html>
