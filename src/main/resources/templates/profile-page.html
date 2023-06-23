@@ -6,12 +6,12 @@
   <link th:href="@{/css/main.css}" rel="stylesheet" />
   <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet">
-  <title>add-buddy</title>
+  <title>Profile-page</title>
 </head>
 <body>
-<div class="mx-4 my-4">
+<div class="mx-2 mt-2 mb-4">
   <div class="d-flex justify-content-between" style="height:40px">
-    <a type="button" class="btn paymybuddybutton" th:href="@{/home}">Pay My Buddy</a>
+    <a type="button" class="paymybuddybutton" th:href="@{/home}">Pay My Buddy</a>
     <nav class="navbar navbar-expand-sm navbar-light">
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -23,10 +23,10 @@
               <a class="nav-link" th:href="@{/transactions}">Transfer</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Profile</a>
+              <a class="nav-link active" th:href="@{/profile}">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" th:href="@{/contact-requests}">Contact</a>
+              <a class="nav-link" th:href="@{/contact}">Contact</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" th:href="@{/logout}">Log off</a>
@@ -36,19 +36,9 @@
       </div>
     </nav>
   </div>
-  <div class="px-3 py-2 mt-1" style="background-color: #F5F5F5; border-radius: 2px"><span style="color:dodgerblue">Home   /   <span style="color:grey">Contact</span></span></div>
+  <div class="px-3 py-2 mt-1" style="background-color: #F5F5F5; border-radius: 2px"><span style="color:dodgerblue">Home   /   <span style="color:grey">Profile</span></span></div>
 
-<h1>Add Buddy</h1>
-  <a type="button" class="btn btn-primary" th:href="@{/contact-requests}">See all your buddies</a>
-<form action="/add-contact" method="post">
-  <div>
-    <label for="buddyEmail">Buddy Email:</label>
-    <input type="email" id="buddyEmail" name="buddyEmail" required>
-  </div>
-  <div>
-    <button type="submit">Send Request</button>
-  </div>
-</form>
-  </div>
+  <h1>Your Profile</h1>
+</div>
 </body>
 </html>

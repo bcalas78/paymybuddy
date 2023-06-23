@@ -35,16 +35,19 @@ public class TransactionController {
     UserServiceImpl userService;
 
     @GetMapping("/transactions")
-    public String showTransactions(Model model) {
-        User currentUser = userService.getCurrentUser();
+    public String showTransactions(Model model, Principal principal) {
+        String email = principal.getName();
+        User currentUser = userService.findUserByEmail(email);
 
         List<Contact> buddies = currentUser.getBuddies();
+        List<Contact> contacts = contactService.getContacts(currentUser);
 
-        Iterable<Transaction> transactionIterable = transactionService.getTransactions();
+        Iterable<Transaction> transactionIterable = transactionService.getTransactionsByUser(currentUser);
         List<Transaction> transactions = StreamSupport.stream(transactionIterable.spliterator(), false)
                         .collect(Collectors.toList());
 
         model.addAttribute("buddies", buddies);
+        model.addAttribute("contacts", contacts);
         model.addAttribute("transactionForm", new TransactionForm());
         model.addAttribute("transactions", transactions);
         model.addAttribute("currentUser", currentUser);

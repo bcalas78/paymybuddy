@@ -9,9 +9,9 @@
     <title>Transaction</title>
 </head>
 <body>
-<div class="mx-4 my-4">
+<div class="mx-2 mt-2 mb-4">
     <div class="d-flex justify-content-between" style="height:40px">
-        <a type="button" class="btn paymybuddybutton" th:href="@{/home}">Pay My Buddy</a>
+        <a type="button" class="paymybuddybutton" th:href="@{/home}">Pay My Buddy</a>
         <nav class="navbar navbar-expand-sm navbar-light">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -23,10 +23,10 @@
                             <a class="nav-link active" th:href="@{/transactions}">Transfer</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Profile</a>
+                            <a class="nav-link" th:href="@{/profile}">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/contact-requests}">Contact</a>
+                            <a class="nav-link" th:href="@{/contact}">Contact</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/logout}">Log off</a>
@@ -36,34 +36,72 @@
             </div>
         </nav>
     </div>
-    <div class="px-3 py-2 mt-1" style="background-color: #F5F5F5; border-radius: 2px"><span style="color:dodgerblue">Home   /<span style="color:grey">   Contact</span></span></div>
-<h1>Transactions</h1>
-    <h2>Send Money</h2>
-    <a type="button" class="btn btn-primary" th:href="@{/add-contact}">Add Connection</a>
-    <h3>You have: <span th:text="${currentUser.user_amount}"></span>€</h3>
-    <form method="post" action="/transactions" th:object="${transactionForm}">
-        <label for="buddyEmail">Buddy Email:</label>
-        <input  type="text" name="buddyEmail" id="buddyEmail" required>
-        <label for="amount">Amount:</label>
-        <input  type="text" name="amount" id="amount" required>
-        <label for="description">Description:</label>
-        <input  type="text" name="description" id="description" required>
-        <button type="submit">Pay</button>
-    </form>
+    <div class="px-3 py-2 mt-1" style="background-color: #F5F5F5; border-radius: 2px"><span style="color:dodgerblue">Home   /<span style="color:grey">   Transfer</span></span></div>
 
-    <h2>My Transactions</h2>
-    <table>
-        <tr>
-            <th>Connections</th>
-            <th>Description</th>
-            <th>Amount</th>
-        </tr>
-        <tr th:each="transaction : ${transactions}">
-            <td th:text="${transaction.contact.buddy.first_name}"></td>
-            <td th:text="${transaction.description}"></td>
-            <td th:text="${transaction.amount}"></td>
-        </tr>
-    </table>
+    <div class="d-flex justify-content-between align-items-center mt-3 col-md-10 offset-md-1" >
+        <h6 class="ps-1" style="font-size: 18px;">Send Money</h6>
+        <h6 class="text-center">💶 You have: <span th:text="${currentUser.user_amount}"></span>€</h6>
+        <a type="button" class="btn btn-primary" th:href="@{/contact}">Add Connection</a>
+    </div>
+    <div class="mt-1 col-md-10 offset-md-1 p-4 d-flex justify-content-around align-items-center" style="background-color: #F5F5F5; border-radius: 2px">
+
+            <form method="post" action="/transactions" th:object="${transactionForm}">
+                <label for="buddyEmail"></label>
+                <select name="buddyEmail" id="buddyEmail">
+                    <option value="" style="text-align: center">-- Select A Connection --</option>
+                        <option th:each="contact : ${contacts}" th:text="${contact.getBuddy().getEmail()}" style="text-align: center"></option>
+                </select>
+                <label for="amount"></label>
+                <input placeholder="0€" type="number" name="amount" id="amount" min="0" step="0.5" required class="amount-input" style="text-align: right">
+                <label for="description"></label>
+                <input  placeholder="description" type="text" name="description" id="description" required style="text-align: right">
+                <button type="submit" class="paybutton" style="border: none !important;">Pay</button>
+            </form>
+
+    </div>
+
+    <div class="mt-3" >
+        <h6 class="ps-1 col-md-10 offset-md-1" style="font-size: 18px;">My Transactions</h6>
+
+        <div th:if="${transactions.isEmpty()}" class="ps-1 col-md-10 offset-md-1" style="background-color: #F5F5F5; border-radius: 2px; text-align: center">
+            <p class="p-2"> 🚨 You don't have any transaction yet! 🚨</p>
+        </div>
+
+        <div th:if="${not transactions.isEmpty()}">
+            <table class="col-md-10 offset-md-1" style="border: solid 1px black">
+                <tr style="background-color: #64BB5D; color: white; text-align: center">
+                    <th class="table-padding">Connections</th>
+                    <th class="table-padding">Description</th>
+                    <th class="table-padding">Amount</th>
+                </tr>
+                <tr th:each="transaction : ${transactions}">
+                    <td class="table-padding" th:text="${transaction.contact.buddy.first_name}"></td>
+                    <td class="table-padding" th:text="${transaction.description}"></td>
+                    <td class="table-padding"><span th:text="${transaction.amount}"></span>€</td>
+                </tr>
+            </table>
+
+            <nav aria-label="Page navigation" class="mt-1">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disable">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 </div>
 
 <script crossorigin="anonymous"

@@ -23,7 +23,7 @@ public class ContactController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/contact-requests")
+    /*@GetMapping("/contact-requests")
     public String contactRequests(Model model, Principal principal) {
         String email = principal.getName();
         User user = userService.findUserByEmail(email);
@@ -32,15 +32,20 @@ public class ContactController {
         model.addAttribute("contacts", contacts);
 
         return "contact-requests-page";
-    }
+    }*/
 
-    @GetMapping("/add-contact")
-    public String showAddContactForm(Model model) {
+    @GetMapping("/contact")
+    public String showAddContactForm(Model model, Principal principal) {
+        String email = principal.getName();
+        User user = userService.findUserByEmail(email);
+
+        List<Contact> contacts = contactService.getContacts(user);
+        model.addAttribute("contacts", contacts);
         model.addAttribute("contact", new Contact());
-        return "add-contact";
+        return "contact-page";
     }
 
-    @PostMapping("/add-contact")
+    @PostMapping("/contact")
     public String sendContactRequest(@RequestParam("buddyEmail") String buddyEmail, Principal principal) {
         String userEmail = principal.getName();
 
@@ -51,7 +56,7 @@ public class ContactController {
             contactService.sendContactRequest(user, buddy);
         }
 
-        return "redirect:/contact-requests";
+        return "redirect:/contact-page";
     }
 
      /*@PostMapping("/contact-requests/accept")

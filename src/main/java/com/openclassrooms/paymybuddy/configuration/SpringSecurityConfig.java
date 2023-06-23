@@ -33,7 +33,10 @@ public class SpringSecurityConfig {
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll())
-                .exceptionHandling().accessDeniedPage("/access-denied");
+                .exceptionHandling().accessDeniedPage("/access-denied")
+                .and()
+                .rememberMe()
+                .key("uniqueAndSecret");
                 //.and()
                 //.oauth2Login();
         return http.build();

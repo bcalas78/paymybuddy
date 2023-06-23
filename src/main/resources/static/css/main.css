@@ -1,6 +1,29 @@
 .paymybuddybutton {
     color: white !important;
-    background: linear-gradient(45deg, #64BB5D, #83C128)
+    background: linear-gradient(45deg, #64BB5D, #83C128);
+    padding: 8px 24px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+
+.paymybuddybutton:hover {
+    background: linear-gradient(45deg, #83C128, #64BB5D);
+    color: white;
+}
+
+.paybutton {
+    color: white;
+    background-color: #64BB5D;
+    padding: 4px 48px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    border: none
+}
+
+.paybutton:hover {
+    background-color: #83C128;
+    color: white;
 }
 
 .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show>.nav-link {
@@ -36,4 +59,30 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 16px
+}
+
+table {
+    table-layout: fixed;
+}
+
+th, td {
+    padding: 20px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.amount-input::after {
+    content: "€";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: black;
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
 }

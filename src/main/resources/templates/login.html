@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -10,8 +10,10 @@
 <body>
   <div class="container">
     <div class="row mt-5">
-      <div class="col-6 mx-auto">
-        <h1>Login Form</h1>
+      <div class="col-md-4 offset-md-4 border rounded">
+        <div class="d-flex justify-content-center mt-4">
+          <span style="color: white !important; background: linear-gradient(45deg, #64BB5D, #83C128); padding: 8px 24px; border-radius: 4px; transition: background 0.3s ease;">Pay My Buddy</span>
+        </div>
         <div th:if="${param.error}">
           <div class="alert alert-danger">Invalid Email or Password !!!</div>
         </div>
@@ -24,19 +26,26 @@
                 role="form"
                 th:action="@{/login}"
         >
-          <div class="mb-3">
-            <label class="form-label" for="password">Email</label>
-            <input class="form-control" id="username" name="username" placeholder="Enter email address"
+          <div class="mb-4 mt-5">
+            <input class="form-control" id="username" name="username" placeholder="✉ Email"
                    type="email">
           </div>
-          <div class="mb-3">
-            <label class="col-sm-2 col-form-label" for="password">Password</label>
-            <input class="form-control" id="password" name="password" placeholder="Enter password"
+          <div class="mb-5">
+            <input class="form-control" id="password" name="password" placeholder="✳ Password"
                    type="password">
           </div>
-          <div class="mb-3">
-            <button class="btn btn-primary mb-3" type="submit">Login</button>
-            or <a class="link-primary" th:href="@{/registration}">Register</a>
+          <div class="d-flex align-items-center justify-content-center mt-4 mb-5">
+            <input type="checkbox" name="remember-me" class="me-2">
+            <span style="font-weight: bold"> Remember me</span>
+          </div>
+
+          <div class="mb-3 d-flex flex-column align-items-center">
+            <div>
+              <button class="btn btn-primary mb-3 mt-3 px-5" type="submit">Login</button>
+            </div>
+            <div>
+              or <a class="link-primary" th:href="@{/registration}">Register</a>
+            </div>
           </div>
         </form>
       </div>

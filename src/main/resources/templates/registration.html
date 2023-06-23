@@ -10,52 +10,54 @@
 <body>
 <div class="container">
     <div class="row mt-5">
-        <div class="col-6 mx-auto">
+        <div class="col-md-4 offset-md-4 border rounded">
+            <div class="d-flex justify-content-center mt-4 mb-3">
+                <span style="color: white !important; background: linear-gradient(45deg, #64BB5D, #83C128); padding: 8px 24px; border-radius: 4px; transition: background 0.3s ease;">Pay My Buddy</span>
+            </div>
             <form
                     method="post"
                     role="form"
                     th:action="@{/registration}"
                     th:object="${user}"
             >
-                <h1>Registration Form</h1>
                 <div th:if="${param.success}">
                     <div class="alert alert-info">
                         Registration successful !!!
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="first_name">First name</label>
-                    <input class="form-control" id="first_name" name="first_name" type="text">
+                <div class="mb-4 mt-5">
+                    <input placeholder="💬 First name" class="form-control" id="first_name" name="first_name" type="text">
                     <p class="text-danger" th:errors="*{first_name}"
                        th:if="${#fields.hasErrors('first_name')}"></p>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="last_name">Last name</label>
-                    <input class="form-control" id="last_name" name="last_name" type="text">
+                <div class="mb-4">
+                    <input placeholder="🗨 Last name"class="form-control" id="last_name" name="last_name" type="text">
                     <p class="text-danger" th:errors="*{last_name}"
                        th:if="${#fields.hasErrors('last_name')}"></p>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="email">Email</label>
-                    <input class="form-control" id="email" name="email" type="email">
+                <div class="mb-4">
+                    <input input placeholder="✉ Email" class="form-control" id="email" name="email" type="email">
                     <p class="text-danger" th:errors="*{email}"
                        th:if="${#fields.hasErrors('email')}"></p>
                 </div>
-                <div class="mb-3">
-                    <label class="col-sm-2 col-form-label" for="password">Password</label>
-                    <input class="form-control" id="password" name="password" type="password">
+                <div class="mb-4">
+                    <input placeholder="✳ Password" class="form-control" id="password" name="password" type="password">
                     <p class="text-danger" th:errors="*{password}"
                        th:if="${#fields.hasErrors('password')}"></p>
                 </div>
-                <div class="mb-3">
-                    <label class="col-sm-2 col-form-label" for="user_amount">Amount from your bank account</label>
-                    <input class="form-control" id="user_amount" name="user_amount" type="user_amount">
+                <div class="mb-5">
+                    <input placeholder="💶 Amount from your bank account €"class="form-control" id="user_amount" name="user_amount" type="user_amount">
                     <p class="text-danger" th:errors="*{user_amount}"
                        th:if="${#fields.hasErrors('user_amount')}"></p>
                 </div>
-                <div class="mb-3">
-                    <button class="btn btn-primary mb-3" type="submit">Register</button>
-                    or <a class="link-primary" th:href="@{/login}">Login</a>
+
+                <div class="mb-3 d-flex flex-column align-items-center">
+                    <div>
+                        <button class="btn btn-primary mb-3 mt-3 px-5" type="submit">Register</button>
+                    </div>
+                    <div>
+                        or <a class="link-primary" th:href="@{/login}">Login</a>
+                    </div>
                 </div>
             </form>
         </div>

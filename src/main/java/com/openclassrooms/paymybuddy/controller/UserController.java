@@ -21,5 +21,13 @@ public class UserController {
         return "home";
     }
 
+    @GetMapping("/profile")
+    public String showProfilePage(Model model) {
+
+        User currentUser = userService.getCurrentUser();
+        model.addAttribute("currentUser", currentUser);
+        return "profile-page";
+    }
+
 
 }
