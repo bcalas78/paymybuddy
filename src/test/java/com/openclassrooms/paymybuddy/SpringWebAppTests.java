@@ -42,14 +42,4 @@ public class SpringWebAppTests {
     public void shouldReturnDefaultMessage() throws Exception {
         mock.perform(get("/login")).andDo(print()).andExpect(status().isOk());
     }
-
-    /*@Test
-    public void userLoginTest() throws Exception {
-        mock.perform(formLogin("/login").user("springuser").password("spring123")).andExpect(authenticated());
-    }
-
-    @Test
-    public void userLoginFailTest() throws Exception {
-        mock.perform(formLogin("/login").user("springuser").password("wrongpassword")).andExpect(unauthenticated());
-    }*/
 }

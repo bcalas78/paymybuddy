@@ -1,5 +1,6 @@
 package com.openclassrooms.paymybuddy.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,32 +37,10 @@ public class SpringSecurityConfig {
                 .exceptionHandling().accessDeniedPage("/access-denied")
                 .and()
                 .rememberMe()
-                .key("uniqueAndSecret");
-                //.and()
-                //.oauth2Login();
+                .key("uniqueAndSecret")
+                .and()
+                .oauth2Login()
+                    .loginPage("/login");
         return http.build();
     }
-
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("springuser").password(passwordEncoder().encode("spring123"))
-                .roles("USER")
-                .and()
-                .withUser("springadmin").password(passwordEncoder().encode("admin123"))
-                .roles("ADMIN", "USER");
-    }
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/user").hasRole("USER")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .and()
-                .oauth2Login();
-    }*/
 }

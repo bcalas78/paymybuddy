@@ -6,7 +6,6 @@ import com.openclassrooms.paymybuddy.model.Contact;
 import com.openclassrooms.paymybuddy.model.Fee;
 import com.openclassrooms.paymybuddy.model.Transaction;
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.repository.ContactRepository;
 import com.openclassrooms.paymybuddy.repository.FeeRepository;
 import com.openclassrooms.paymybuddy.repository.TransactionRepository;
 import com.openclassrooms.paymybuddy.repository.UserRepository;
@@ -25,30 +24,13 @@ public class TransactionService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserServiceImpl userService;
-
-    @Autowired
-    private ContactRepository contactRepository;
-
-    @Autowired
-    private ContactService contactService;
-
-    @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
     private FeeRepository feeRepository;
 
-    public Iterable<Transaction> getTransactions() {
-        return transactionRepository.findAll();
-    }
-
-    public List<Transaction> getTransactionsByUser(User user) {
+    public List<Transaction> getTransactionsByUser(User user) throws Exception {
         return transactionRepository.findByContactUser(user);
-    }
-
-    public Optional<Transaction> getTransactionById(Integer id) {
-        return transactionRepository.findById(id);
     }
 
     public Transaction makeTransaction(Contact contact, float amount, String description) {

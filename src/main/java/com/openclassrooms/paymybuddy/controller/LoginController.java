@@ -26,11 +26,11 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    //private final OAuth2AuthorizedClientService authorizedClientService;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
-    /*public LoginController(OAuth2AuthorizedClientService authorizedClientService) {
+    public LoginController(OAuth2AuthorizedClientService authorizedClientService) {
         this.authorizedClientService = authorizedClientService;
-    }*/
+    }
 
     @RequestMapping("/login")
     public String loginForm() {
@@ -39,8 +39,12 @@ public class LoginController {
 
     @GetMapping("/registration")
     public String registrationForm(Model model) {
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
+        try {
+            UserDto user = new UserDto();
+            model.addAttribute("user", user);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "registration";
     }
 
@@ -49,18 +53,23 @@ public class LoginController {
             @Valid @ModelAttribute("user") UserDto userDto,
             BindingResult result,
             Model model) {
-        com.openclassrooms.paymybuddy.model.User existingUser = userService.findUserByEmail(userDto.getEmail());
+        try {
+            com.openclassrooms.paymybuddy.model.User existingUser = userService.findUserByEmail(userDto.getEmail());
 
-        if (existingUser != null)
-            result.rejectValue("email", null,
-                    "User already registered !!!");
+            if (existingUser != null)
+                result.rejectValue("email", null,
+                        "User already registered !!!");
 
-        if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
-            return "/registration";
+            if (result.hasErrors()) {
+                model.addAttribute("user", userDto);
+                return "/registration";
+            }
+
+            userService.saveUser(userDto);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
         }
 
-        userService.saveUser(userDto);
         return "redirect:/registration?success";
     }
 
@@ -108,17 +117,5 @@ public class LoginController {
             usernameInfo.append("NA");
         }
         return usernameInfo;
-    }*/
-
-    /*@RequestMapping("/**")
-    @RolesAllowed("USER")
-    public String getUser() {
-        return "Welcome, User";
-    }
-
-    @RequestMapping("/admin")
-    @RolesAllowed("ADMIN")
-    public String getAdmin() {
-        return "Welcome, Admin";
     }*/
 }

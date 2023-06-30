@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Transactional
 public class BankAccountService {
@@ -21,15 +19,8 @@ public class BankAccountService {
     @Autowired
     private UserRepository userRepository;
 
-    public Iterable<BankAccount> getBankAccounts() {
-        return bankAccountRepository.findAll();
-    }
+    public void createBankAccount(BankAccountDto bankAccountDto) throws Exception {
 
-    public Optional<BankAccount> getBankAccountById(Integer id) {
-        return bankAccountRepository.findById(id);
-    }
-
-    public void createBankAccount(BankAccountDto bankAccountDto) {
         BankAccount bankAccount = new BankAccount();
         bankAccount.setBank_amount(bankAccountDto.getBank_amount());
 

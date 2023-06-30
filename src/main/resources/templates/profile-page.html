@@ -56,21 +56,47 @@
   </div>
 
   <div class="mt-1 col-md-10 offset-md-1 p-4 d-flex flex-column justify-content-around align-items-center" style="background-color: #F5F5F5; border-radius: 2px">
-    <form th:action="@{/profile}" method="post">
-      <label for="bank_amount">Your bank account amount:</label>
-      <input placeholder="0€" type="number" id="bank_amount" name="bank_amount" value="" required style="text-align: right">
-      <button type="submit" class="paybutton">Save</button>
-    </form>
-    <p th:if="${currentUser.bankAccount != null}" class="mt-3">Your bank account amount is now: <span th:text="${currentUser.bankAccount.bank_amount}"></span>€</p>
+    <div th:if="${currentUser.bankAccount.bank_amount == null}" >
+      <form th:action="@{/profile/saveBankAmount}" method="post">
+        <label for="bank_amount">Your bank account amount:</label>
+        <input placeholder="0€" type="number" id="bank_amount" name="bank_amount" value="" required style="text-align: right">
+        <button type="submit" class="paybutton">Save</button>
+      </form>
+    </div>
+    <div th:if="${currentUser.bankAccount.bank_amount != null}">
+      <p class="mt-3">Your bank account amount is now: <strong><span th:text="${currentUser.bankAccount.bank_amount}"></span>€</strong></p>
+      <div class="mt-3">
+        <form th:action="@{/profile/addMoneyToBankAccount}" method="post">
+          <label for="new_bank_amount">Add Money to your Bank Account</label>
+          <input placeholder="0€" type="number" id="new_bank_amount" name="new_bank_amount" value="" required style="text-align: right">
+          <button type="submit" class="paybutton">Add</button>
+        </form>
+      </div>
+
+      <div class="mt-3">
+        <form th:action="@{/profile/addMoneyToUserAccount}" method="post">
+          <label for="amount_to_bank_account">Add Money from your bank account to your Pay My Buddy Account</label>
+          <input placeholder="0€" type="number" id="amount_to_bank_account" name="amount_to_bank_account" value="" required style="text-align: right">
+          <button type="submit" class="paybutton">Add on user account</button>
+        </form>
+      </div>
+      <div class="mt-3 mb-3">
+        <form th:action="@{/profile/withdrawMoney}" method="post">
+          <label for="amount_from_bank_account">Add Money to your bank account from your Pay My Buddy Account</label>
+          <input placeholder="0€" type="number" id="amount_from_bank_account" name="amount_from_bank_account" value="" required style="text-align: right">
+          <button type="submit" class="paybutton">Add on bank account</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <div class="mt-3" >
     <h6 class="ps-1 col-md-10 offset-md-1" style="font-size: 18px;">Your Fees</h6>
-    <div th:if="${fees.isEmpty()}" class="ps-1 col-md-10 offset-md-1" style="background-color: #F5F5F5; border-radius: 2px; text-align: center">
+    <div th:if="${pagingFees.isEmpty()}" class="ps-1 col-md-10 offset-md-1" style="background-color: #F5F5F5; border-radius: 2px; text-align: center">
       <p class="p-2"> 🚨 You don't have any transaction and fee yet! 🚨</p>
     </div>
 
-    <div th:if="${not fees.isEmpty()}">
+    <div th:if="${not pagingFees.isEmpty()}">
       <table class="col-md-10 offset-md-1" style="border: solid 1px black">
         <tr style="background-color: #64BB5D; color: white; text-align: center">
           <th class="table-padding">Connections</th>
@@ -78,7 +104,7 @@
           <th class="table-padding">Transaction amount</th>
           <th class="table-padding">Fee amount</th>
         </tr>
-        <tr th:each="fee : ${fees}">
+        <tr th:each="fee : ${pagingFees}">
           <td class="table-padding" th:text="${fee.getTransaction().getContact().getBuddy().first_name}"></td>
           <td class="table-padding" th:text="${fee.getTransaction().description}"></td>
           <td class="table-padding"><span th:text="${fee.getTransaction().amount}"></span>€</td>
@@ -86,22 +112,23 @@
         </tr>
       </table>
 
-      <nav aria-label="Page navigation" class="mt-1">
+      <nav aria-label="Pagination" class="mt-1">
         <ul class="pagination justify-content-center">
-          <li class="page-item disable">
-            <a class="page-link" href="#" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-            </a>
+          <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+            <a th:replace="fragments/profilePaging :: paging(1, '&laquo;', 'First Page')"></a>
           </li>
-          <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">4</a></li>
-          <li class="page-item"><a class="page-link" href="#">5</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-            </a>
+          <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+            <a class="page-link" href="#">...</a>
+          </li>
+          <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+              th:each="page : ${#numbers.sequence((currentPage > 2 ? currentPage - 2 : 1), (currentPage + 2 < totalPages ? currentPage + 2 : totalPages))}">
+            <a th:replace="fragments/profilePaging :: paging(${page}, ${page}, 'Page' + ${page})"></a>
+          </li>
+          <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+            <a class="page-link" href="#">...</a>
+          </li>
+          <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+            <a th:replace="fragments/profilePaging :: paging(${totalPages}, '&raquo;', 'Last Page')"></a>
           </li>
         </ul>
       </nav>

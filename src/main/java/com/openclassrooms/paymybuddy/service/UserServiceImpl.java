@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,14 +42,6 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
 
         return userRepository.findByEmail(email);
-    }
-
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
-    }
-
-    public Optional<User> getUserById(Integer id) {
-        return userRepository.findById(id);
     }
 
     public User getCurrentUser() {
